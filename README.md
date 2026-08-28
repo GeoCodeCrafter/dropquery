@@ -36,17 +36,31 @@ dropquery is that tab.
 
 ## The privacy claim, and how it is kept honest
 
-The claim is the product, so it is enforced rather than promised:
+The claim is the product, so it is stated precisely and enforced mechanically.
 
-1. A **strict Content Security Policy** with `connect-src 'none'` after the WASM
-   bundle has loaded. The page cannot make a network request, even if a
-   dependency tried.
-2. A **CI test that fails the build** if any bundled module references `fetch`,
-   `XMLHttpRequest`, `WebSocket` or `navigator.sendBeacon` outside the allowed
-   loader path.
-3. **No analytics, no fonts from a CDN, no error reporting.** The dependency
-   list is short specifically so this stays checkable.
-4. It works **offline**. Load it once, pull the network cable, use it forever.
+The precise claim is **not** "this page cannot make a network request". DuckDB
+has to load its own WebAssembly module, and it uses XHR to do it. A README
+promising `connect-src 'none'` would be a lie that anyone could catch in a
+minute, so here is the true version:
+
+> The page talks to its own origin and nowhere else. Your data has nowhere to go.
+
+Enforced by:
+
+1. **`connect-src 'self'`** in the Content Security Policy, alongside
+   `object-src 'none'`, `base-uri 'none'` and `form-action 'none'`. The browser
+   refuses any cross-origin request regardless of what the code asks for.
+2. **The application bundle contains no network primitives at all** - no
+   `fetch`, `XMLHttpRequest`, `WebSocket`, `sendBeacon` or `EventSource`. Vite's
+   module-preload polyfill is switched off in `vite.config.ts` specifically so
+   this stays literally true and mechanically checkable.
+3. **A CI check that fails the build** ([`scripts/check-no-network.mjs`](scripts/check-no-network.mjs))
+   if a primitive appears in application code, or if any CDN host appears as a
+   request target anywhere. The engine's own loader is exempted by name, and the
+   check prints its exemptions on every run rather than hiding them.
+4. **No analytics, no CDN fonts, no error reporting.** The WASM is bundled from
+   `node_modules` and served from this origin, never from jsDelivr.
+5. It works **offline**. Load it once, pull the network cable, use it forever.
 
 ## Install
 

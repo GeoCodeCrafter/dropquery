@@ -31,3 +31,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: The privacy claim must still hold
+        run: npm run check:no-network

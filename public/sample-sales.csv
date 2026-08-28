@@ -1,0 +1,13 @@
+region,quarter,revenue,orders,note
+north,Q1,4373.28,120,"steady, no promotions"
+south,Q1,2810.10,88,"launch quarter"
+east,Q1,5120.00,143,"best performing"
+west,Q1,1990.55,61,""
+north,Q2,4899.12,131,"price rise held"
+south,Q2,3402.77,101,"promo ran in May"
+east,Q2,5433.90,150,""
+west,Q2,2140.30,70,"new account, said ""finally"""
+north,Q3,5210.44,148,""
+south,Q3,3688.05,112,""
+east,Q3,5901.20,166,"record"
+west,Q3,2380.00,79,""

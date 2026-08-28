@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      connect-src 'self' is the enforceable form of the privacy promise: the page
+      may load its own WebAssembly and nothing else. It is not 'none' because the
+      SQL engine has to fetch its own module from this origin - see
+      scripts/check-no-network.mjs for the full reasoning.
+      'wasm-unsafe-eval' is what compiling WebAssembly requires; it does not
+      permit eval of JavaScript.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>dropquery - SQL over your file, in your browser</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>dropquery</h1>
+      <p>
+        Drop a CSV, JSON or Parquet file. Query it with real SQL. Nothing is
+        uploaded - open the network tab and watch.
+      </p>
+    </header>
+
+    <main>
+      <section id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Drop a file to query">
+        <strong>Drop a file here</strong>
+        <span>or click to choose one</span>
+        <input type="file" id="file" hidden accept=".csv,.tsv,.json,.ndjson,.jsonl,.parquet" />
+      </section>
+
+      <p id="status" role="status" class="status"></p>
+
+      <section id="workspace" hidden>
+        <label for="sql">SQL</label>
+        <textarea id="sql" spellcheck="false" rows="3"></textarea>
+        <div class="actions">
+          <button type="button" id="run">Run</button>
+          <button type="button" id="copy-md">Copy as markdown</button>
+          <button type="button" id="download-csv">Download CSV</button>
+          <span id="meta" class="meta"></span>
+        </div>
+
+        <canvas id="chart" height="240" aria-label="Chart of the current result"></canvas>
+        <div class="table-scroll"><table id="results"></table></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

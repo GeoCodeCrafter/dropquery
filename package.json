@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/GeoCodeCrafter/dropquery#readme",
   "type": "module",
-  "engines": { "node": ">=18.18" },
+  "engines": {
+    "node": ">=18.18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -40,5 +42,9 @@
     "typescript": "^5.6.3",
     "vite": "^6.0.0",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.33.1-dev57.0",
+    "apache-arrow": "^21.2.0"
   }
 }

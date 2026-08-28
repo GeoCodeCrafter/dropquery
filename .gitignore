@@ -9,3 +9,6 @@ blob-report/
 .playwright/
 *.local
 .vite/
+
+# Vendored WASM is rebuilt from node_modules; never commit 70MB of engine.
+public/*.wasm
