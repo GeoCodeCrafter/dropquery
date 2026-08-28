@@ -1,0 +1,44 @@
+{
+  "name": "dropquery",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drop a CSV, Parquet or XLSX file, query it with real SQL, chart the result and export it - entirely in the browser, with the network provably unused.",
+  "keywords": [
+    "duckdb",
+    "wasm",
+    "csv",
+    "parquet",
+    "sql",
+    "data-visualisation",
+    "privacy",
+    "offline",
+    "vite"
+  ],
+  "license": "MIT",
+  "author": "OpusDevs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoCodeCrafter/dropquery.git"
+  },
+  "homepage": "https://github.com/GeoCodeCrafter/dropquery#readme",
+  "type": "module",
+  "engines": { "node": ">=18.18" },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check:no-network": "node scripts/check-no-network.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^2.1.8",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vitest": "^2.1.8"
+  }
+}
