@@ -1,29 +1,47 @@
 # Contributing
 
-Thanks for looking. This is early - the fastest way to help is to try it and
-tell me where it lied to you.
-
-## Getting set up
+## Setup
 
 ```bash
 npm install
 npm run dev
 npm test
+npm run build && npm run check:no-network
 ```
 
-## The rules that are not negotiable
+That last one is worth running before you push anything — it's the check that
+keeps the README honest, and it fails the build rather than warning.
 
-1. **The page makes no network requests after load.** This is the product. A
-   dependency that phones home is not merged, however useful it is.
-2. **No analytics, no CDN fonts, no error reporting.**
-3. **Nothing is persisted unless the user asks for it.**
-4. **Large files stream.** Never read a whole file into one buffer.
+## The one rule
 
-Each of these has tests behind it. If you find yourself editing those tests to
-make a change pass, stop and reconsider the change.
+**The application bundle must not be able to reach the network.** That's the
+entire product. A dependency that phones home doesn't get merged no matter how
+useful it is, and neither does an analytics snippet, a CDN font, or an error
+reporter.
+
+`scripts/check-no-network.mjs` enforces it. DuckDB's own loader is exempted by
+name, because it genuinely has to fetch its WebAssembly from this origin, and the
+check prints that exemption on every run so it stays visible. If you find
+yourself widening that allowlist, stop and work out why first.
+
+Beyond that:
+
+- **Nothing is persisted unless someone asked for it.** No localStorage caches of
+  other people's data.
+- **Large files stream.** Never read a whole file into one buffer — DuckDB gets a
+  file handle and range-reads it, and that's what makes big files work at all.
+
+## Where things live
+
+Anything with a decision in it is a pure function with tests: format sniffing,
+the chart choice, the axis maths, the serialisers. The DuckDB and canvas layers
+are excluded from coverage and verified by running them instead, because mocking
+a WASM database only proves the mock got called.
+
+If you're adding a format, `engine/sniff.ts` is the place, and it needs a test
+for the case where it should *not* fire — misdetecting a file is worse than
+refusing it.
 
 ## Pull requests
 
-- One change per pull request.
-- A bug fix comes with the test that would have caught it.
-- Run the checks before pushing; CI runs the same ones.
+One change at a time. A bug fix comes with the test that would have caught it.

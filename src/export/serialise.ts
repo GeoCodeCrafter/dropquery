@@ -1,6 +1,6 @@
 /**
- * Result set to text. Pure functions over the query result, so every escaping
- * rule is unit tested rather than eyeballed in a download.
+ * Result set to text. Pure functions, so the escaping rules get unit tested
+ * rather than eyeballed after a download.
  */
 
 export interface ResultSet {

@@ -1,7 +1,7 @@
 /**
- * Choosing the chart is a pure function of the result schema. Keeping it pure is
- * what makes the auto-selection testable, and the auto-selection is what makes
- * the tool feel immediate rather than like another SQL client.
+ * Picking the chart is a pure function of the result schema. Keeping it pure is
+ * what makes the auto-selection testable, and the auto-selection is what stops
+ * this feeling like yet another SQL client.
  */
 
 export type ColumnType = 'temporal' | 'numeric' | 'categorical' | 'boolean' | 'other';

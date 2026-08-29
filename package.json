@@ -1,6 +1,6 @@
 {
   "name": "dropquery",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Drop a CSV, Parquet or XLSX file, query it with real SQL, chart the result and export it - entirely in the browser, with the network provably unused.",
   "keywords": [

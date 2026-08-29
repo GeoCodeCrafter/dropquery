@@ -5,14 +5,12 @@ import type { Format } from './sniff.js';
 /**
  * DuckDB, in a worker, over the dropped file.
  *
- * The important detail is `registerFileHandle`: the `File` is handed to DuckDB
- * as a handle it range-reads on demand. The bytes are never pulled into a
- * JavaScript string or buffer, which is the only reason a 1 GB CSV is survivable
- * in a browser tab.
+ * The important bit is `registerFileHandle`: DuckDB gets the `File` as a handle
+ * it range-reads on demand, so the bytes never land in a JS string or buffer.
+ * That's the only reason a 1 GB CSV is survivable in a tab.
  *
- * The bundle is resolved from assets served by this origin - never a CDN. That
- * is not a preference, it is the privacy claim: the page must be able to run
- * with `connect-src 'none'` and no network at all.
+ * Bundles are served from this origin, never a CDN — see the privacy note in the
+ * README. That's not a preference, it's the product.
  */
 export class Engine {
   readonly #db: duckdb.AsyncDuckDB;

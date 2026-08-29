@@ -5,9 +5,9 @@ import { sniff } from './engine/sniff.js';
 import { toCsv, toMarkdown, type ResultSet } from './export/serialise.js';
 
 /**
- * The app shell. Everything that could be wrong lives in the tested modules;
- * this wires them to the DOM and keeps the promises the README makes - notably
- * that nothing is persisted and nothing is uploaded.
+ * Wiring. Anything that could be wrong lives in the tested modules; this hooks
+ * them to the DOM and keeps the two promises the README makes — nothing
+ * uploaded, nothing persisted.
  */
 
 const dropzone = byId<HTMLElement>('dropzone');

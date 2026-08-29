@@ -3,8 +3,8 @@ import { chooseChart, type ChartForm, type Column } from './choose.js';
 import { niceScale, project } from './scale.js';
 
 /**
- * Canvas drawing. Deliberately thin: the decisions - which chart, what the axis
- * runs to - are made by tested pure functions above, and this only puts pixels
+ * Canvas drawing. Thin on purpose — the decisions (which chart, what the axis
+ * runs to) are made by tested pure functions above, and this just puts pixels
  * where they say.
  */
 export function renderChart(

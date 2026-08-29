@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  // Project pages live under /<repo>/, so asset URLs have to be relative.
+  base: './',
   build: {
     // Vite's module-preload polyfill injects a fetch() into the app bundle. It
     // only ever requests same-origin chunks, but "there is no network code in

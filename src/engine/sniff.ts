@@ -1,10 +1,10 @@
 /**
  * Working out what a dropped file actually is.
  *
- * Extensions lie constantly - `.csv` files that are tab separated, `.txt` files
- * that are JSON, `.csv` files that are semicolon separated because they were
- * exported from Excel in a European locale. So the signature is checked first
- * and the extension is only a tie-breaker.
+ * Extensions lie constantly — `.csv` files that are tab separated, `.txt` files
+ * holding JSON, `.csv` files using semicolons because Excel exported them in a
+ * European locale. So magic bytes get checked first and the extension is only a
+ * last resort.
  */
 
 export type Format = 'csv' | 'tsv' | 'json' | 'ndjson' | 'parquet' | 'xlsx' | 'unknown';

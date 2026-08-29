@@ -1,9 +1,9 @@
 /**
- * Axis maths, kept separate from any drawing so it can be tested.
+ * Axis maths, kept away from any drawing so it can be tested.
  *
- * A chart whose axis runs 0 to 4373.2891 with seven decimal places on every tick
- * is the giveaway that nobody thought about the reader. Ticks should land on
- * numbers a person would have chosen.
+ * An axis running 0 to 4373.2891 with seven decimals on every tick is the
+ * giveaway that nobody thought about whoever has to read it. Ticks should land
+ * on numbers a person would have picked.
  */
 
 export interface Scale {
