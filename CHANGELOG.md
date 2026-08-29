@@ -24,6 +24,10 @@ First cut. Drop a file, query it, chart it, export it.
   `BigInt` and `JSON.stringify` refuses them outright — not a rounding problem, a
   hard `TypeError`. They serialise as strings now, since narrowing to a double
   would lose precision on exactly the values big enough to need a BigInt.
+- **The chart never redrew on resize.** A canvas is sized in device pixels, so
+  it stayed at whatever width the window happened to be when the query ran, then
+  stretched. A `ResizeObserver` handles it, which also covers a canvas that is
+  laid out at zero width inside a hidden container and gets a real size later.
 - **The privacy claim in the README was false.** It promised `connect-src 'none'`,
   which would have broken DuckDB's own WASM load and was catchable in about a
   minute by anyone who looked. Rewritten to what's actually true and enforceable:

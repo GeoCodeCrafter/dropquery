@@ -21,6 +21,19 @@ const meta = byId<HTMLElement>('meta');
 
 let engine: Engine | null = null;
 let current: ResultSet = { columns: [], rows: [] };
+let currentColumns: Column[] = [];
+
+// A canvas is sized in device pixels, so it has to be redrawn whenever its CSS
+// size changes - otherwise the chart stays at whatever width the window happened
+// to be when the query ran, stretched or clipped. Also covers the case where the
+// canvas is laid out at zero width (inside a hidden tab, say) and gets a real
+// size later.
+const chartResize = new ResizeObserver(() => {
+  if (current.rows.length > 0 && chart.clientWidth > 0) {
+    renderChart(chart, current, currentColumns);
+  }
+});
+chartResize.observe(chart);
 
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('keydown', (event) => {
@@ -95,8 +108,8 @@ async function run(sql: string): Promise<void> {
   try {
     current = await engine.query(sql);
     renderTable(current);
-    const columns = inferColumns(current);
-    const form = renderChart(chart, current, columns);
+    currentColumns = inferColumns(current);
+    const form = renderChart(chart, current, currentColumns);
     meta.textContent = `${current.rows.length} rows in ${Math.round(performance.now() - started)}ms - ${form}`;
   } catch (error) {
     say((error as Error).message);
