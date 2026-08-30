@@ -3,6 +3,8 @@
 [![CI](https://github.com/GeoCodeCrafter/dropquery/actions/workflows/ci.yml/badge.svg)](https://github.com/GeoCodeCrafter/dropquery/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
+**[Try it →](https://geocodecrafter.github.io/dropquery/)**
+
 Drop a CSV in. Write SQL against it. Chart the result, export it, close the tab.
 
 Nothing gets uploaded. Open the network panel and watch it stay empty.
@@ -30,6 +32,8 @@ So that's what this is.
   override it if it guessed wrong.
 - Exports to CSV, JSON or NDJSON, or copies the result as a markdown table for
   pasting into a PR.
+- Handles big results — the table only puts the visible rows in the DOM, so 50k
+  rows is about 40 `<tr>`s and a tall scrollbar.
 - Forgets everything on reload. Nothing is written to storage.
 
 ## About the privacy claim
@@ -93,17 +97,19 @@ it checks magic bytes first, then picks the delimiter by which candidate splits
 every sampled line into the same number of fields. A comma inside quoted prose
 won't divide the rows evenly, so it doesn't win.
 
-Anything with a decision in it is a pure function and unit tested. The DuckDB and
-canvas layers are verified by running them, because mocking a WASM database would
-only prove the mock got called.
+Anything with a decision in it is a pure function and unit tested — 52 of those.
+The parts that only exist in a browser get a Playwright suite instead, run
+against the production build rather than the dev server, because the local WASM
+assets are exactly the thing that breaks only once it's bundled. That suite
+checks a real SQL round trip, that 50k rows stay windowed while you scroll, that
+the chart actually has pixels in it, and that nothing off-origin gets requested.
 
 ## Known gaps
 
 - **XLSX is read-only-ish**, which is to say not done. It's a zip full of XML and
   writing it properly is real work.
 - No query cancellation UI yet — the worker supports it, the button doesn't exist.
-- The table view caps at 200 rows. Fine for looking, not yet a real virtualised
-  grid.
+- No column sorting or resizing in the results table yet.
 
 ## Licence
 

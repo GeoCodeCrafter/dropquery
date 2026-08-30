@@ -3,6 +3,7 @@ import type { Column, ColumnType } from './chart/choose.js';
 import { Engine } from './engine/duckdb.js';
 import { sniff } from './engine/sniff.js';
 import { toCsv, toMarkdown, type ResultSet } from './export/serialise.js';
+import { visibleRange } from './ui/virtual-rows.js';
 
 /**
  * Wiring. Anything that could be wrong lives in the tested modules; this hooks
@@ -17,6 +18,7 @@ const workspace = byId<HTMLElement>('workspace');
 const sqlBox = byId<HTMLTextAreaElement>('sql');
 const results = byId<HTMLTableElement>('results');
 const chart = byId<HTMLCanvasElement>('chart');
+const tableScroll = byId<HTMLElement>('table-scroll');
 const meta = byId<HTMLElement>('meta');
 
 let engine: Engine | null = null;
@@ -34,6 +36,18 @@ const chartResize = new ResizeObserver(() => {
   }
 });
 chartResize.observe(chart);
+
+// Re-window on scroll. rAF-throttled: scroll events outrun layout otherwise and
+// the DOM writes start queueing up behind each other.
+let scrollQueued = false;
+tableScroll.addEventListener('scroll', () => {
+  if (scrollQueued) return;
+  scrollQueued = true;
+  requestAnimationFrame(() => {
+    scrollQueued = false;
+    if (current.rows.length > 0) renderRows(current);
+  });
+});
 
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('keydown', (event) => {
@@ -116,14 +130,51 @@ async function run(sql: string): Promise<void> {
   }
 }
 
+/**
+ * Row height in CSS pixels. Has to match `#results tbody tr` in style.css - the
+ * windowing maths needs a fixed row height, and measuring it back out of the DOM
+ * every frame would cost a layout per scroll event.
+ */
+const ROW_HEIGHT = 30;
+
 function renderTable(result: ResultSet): void {
   const header = `<thead><tr>${result.columns.map((c) => `<th>${escape(c)}</th>`).join('')}</tr></thead>`;
-  // Capped at 200 rows: the browser is not asked to lay out a million <tr>s.
-  const body = result.rows
-    .slice(0, 200)
-    .map((row) => `<tr>${row.map((cell) => `<td>${escape(String(cell ?? ''))}</td>`).join('')}</tr>`)
-    .join('');
-  results.innerHTML = `${header}<tbody>${body}</tbody>`;
+  results.innerHTML = `${header}<tbody></tbody>`;
+  renderRows(result);
+}
+
+/**
+ * Only the visible slice goes into the DOM. The rest is two spacer rows holding
+ * the scrollbar open.
+ *
+ * Spacers rather than a transform because it keeps one table: the sticky header
+ * still works and the columns still line themselves up, both of which break the
+ * moment you split the header and body into separate tables.
+ */
+function renderRows(result: ResultSet): void {
+  const body = results.tBodies[0];
+  if (!body) return;
+
+  const window = visibleRange(
+    tableScroll.scrollTop,
+    tableScroll.clientHeight || 400,
+    ROW_HEIGHT,
+    result.rows.length,
+  );
+
+  const rows: string[] = [];
+  if (window.offsetTop > 0) rows.push(`<tr class="spacer" style="height:${window.offsetTop}px"></tr>`);
+
+  for (let i = window.first; i < window.last; i++) {
+    const row = result.rows[i];
+    if (!row) continue;
+    rows.push(`<tr>${row.map((cell) => `<td>${escape(String(cell ?? ''))}</td>`).join('')}</tr>`);
+  }
+
+  const below = window.totalHeight - window.last * ROW_HEIGHT;
+  if (below > 0) rows.push(`<tr class="spacer" style="height:${below}px"></tr>`);
+
+  body.innerHTML = rows.join('');
 }
 
 /** Column types from the values actually returned, for the chart heuristic. */

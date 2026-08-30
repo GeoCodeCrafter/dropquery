@@ -117,9 +117,11 @@ canvas {
   background: #0f1216;
 }
 
-/* Wide results scroll inside their own box; the page never scrolls sideways. */
+/* Wide results scroll inside their own box; the page never scrolls sideways.
+   Fixed height because the row windowing needs something to measure against. */
 .table-scroll {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 60vh;
   margin-top: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -130,6 +132,16 @@ table {
   font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace;
   width: max-content;
   min-width: 100%;
+}
+
+/* Fixed row height - the windowing maths in main.ts depends on it. */
+#results tbody tr {
+  height: 30px;
+}
+
+#results tbody tr.spacer {
+  padding: 0;
+  border: none;
 }
 
 th,

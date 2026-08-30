@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **Windowed results table.** Only the rows on screen go into the DOM, with two
+  spacer rows holding the scrollbar open. 50k rows is roughly 40 `<tr>`s. Spacers
+  rather than a transform, so the sticky header and the column widths keep
+  working.
+- **Playwright suite**, run against the production build: a real SQL round trip,
+  windowing while scrolling, the chart checked by reading pixels back off the
+  canvas, and an assertion that nothing off-origin is ever requested.
+
 ## [0.1.0] - 2026-08-29
 
 First cut. Drop a file, query it, chart it, export it.
@@ -37,6 +49,5 @@ First cut. Drop a file, query it, chart it, export it.
 
 - XLSX. It's a zip of XML and writing it properly is a real chunk of work.
 - Query cancellation in the UI — the worker supports it, the button doesn't exist.
-- The results table caps at 200 rows rather than virtualising properly.
 
 [0.1.0]: https://github.com/GeoCodeCrafter/dropquery/releases/tag/v0.1.0

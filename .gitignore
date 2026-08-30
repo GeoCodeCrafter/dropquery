@@ -12,3 +12,5 @@ blob-report/
 
 # Vendored WASM is rebuilt from node_modules; never commit 70MB of engine.
 public/*.wasm
+test-results/
+playwright-report/
