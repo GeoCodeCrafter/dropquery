@@ -34,13 +34,16 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "check:no-network": "node scripts/check-no-network.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "demo:gif": "node scripts/record-gif.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@types/node": "^22.10.2",
     "@vitest/coverage-v8": "^2.1.8",
+    "gifenc": "^1.0.3",
     "jsdom": "^25.0.1",
+    "pngjs": "^7.0.0",
     "typescript": "^5.6.3",
     "vite": "^6.0.0",
     "vitest": "^2.1.8"

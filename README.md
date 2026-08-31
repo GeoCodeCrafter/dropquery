@@ -9,6 +9,8 @@ Drop a CSV in. Write SQL against it. Chart the result, export it, close the tab.
 
 Nothing gets uploaded. Open the network panel and watch it stay empty.
 
+![Dropping a CSV, writing a GROUP BY over it, and getting a chart and table back](docs/demo.gif)
+
 ---
 
 ## Why
@@ -103,6 +105,23 @@ against the production build rather than the dev server, because the local WASM
 assets are exactly the thing that breaks only once it's bundled. That suite
 checks a real SQL round trip, that 50k rows stay windowed while you scroll, that
 the chart actually has pixels in it, and that nothing off-origin gets requested.
+
+## The GIF above
+
+Generated rather than screen-recorded:
+
+```bash
+npm run dev &
+npm run demo:gif
+```
+
+Playwright drives the app, screenshots each frame and `gifenc` encodes them.
+Playwright bundles an ffmpeg but it's a stripped webm-only build with no GIF
+muxer, so the encoding happens in Node. One palette is shared across all frames -
+quantising them individually makes the colours crawl.
+
+Screenshots don't capture the mouse pointer, so the script draws one and moves it
+in step with the real one.
 
 ## Known gaps
 
