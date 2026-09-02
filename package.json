@@ -15,7 +15,7 @@
     "vite"
   ],
   "license": "MIT",
-  "author": "OpusDevs",
+  "author": "OpusDevs <opusdevs@proton.me>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GeoCodeCrafter/dropquery.git"
